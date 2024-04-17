@@ -1,14 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { nanoid } from 'nanoid';
 import PropTypes from 'prop-types';
 import './App.module.css';
 
 export const ContactForm = ({ addContact }) => {
-  const [name, setName] = useState(() => {
-    const saved = localStorage.getItem('name');
-    const initialValue = JSON.parse(seved);
-    return initialValue || '';
-  });
+  const [name, setName] = useState('');
   const [number, setNumber] = useState('');
 
   const onSubmit = event => {
@@ -19,9 +15,6 @@ export const ContactForm = ({ addContact }) => {
     setNumber('');
   };
 
-  useEffect(() => {
-    localStorage.setItem('name', JSON.stringify(name));
-  }, [name]);
   return (
     <form onSubmit={onSubmit}>
       <label>
