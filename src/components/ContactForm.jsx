@@ -1,0 +1,59 @@
+import React, { useEffect, useState } from 'react';
+import { nanoid } from 'nanoid';
+import PropTypes from 'prop-types';
+import './App.module.css';
+
+export const ContactForm = ({ addContact }) => {
+  const [name, setName] = useState(() => {
+    const saved = localStorage.getItem('name');
+    const initialValue = JSON.parse(seved);
+    return initialValue || '';
+  });
+  const [number, setNumber] = useState('');
+
+  const onSubmit = event => {
+    event.preventDefault();
+    if (!name.trim() || !number.trim()) return;
+    addContact({ id: nanoid(), name, number });
+    setName('');
+    setNumber('');
+  };
+
+  useEffect(() => {
+    localStorage.setItem('name', JSON.stringify(name));
+  }, [name]);
+  return (
+    <form onSubmit={onSubmit}>
+      <label>
+        Name
+        <input
+          type="text"
+          name="name"
+          placeholder="Name"
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Name may contain only letters, apostrophe, dash and spaces."
+          required
+          value={name}
+          onChange={event => setName(event.target.value)}
+        />
+      </label>
+      <label>
+        Phone Number
+        <input
+          type="tel"
+          name="number"
+          placeholder="Phone Number"
+          pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
+          title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
+          required
+          value={number}
+          onChange={event => setNumber(event.target.value)}
+        />
+      </label>
+      <button type="submit">Add Contact</button>
+    </form>
+  );
+};
+ContactForm.propTypes = {
+  addContact: PropTypes.func.isRequired,
+};
